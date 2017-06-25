@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 
-<meta name="author" content="Zhengguo Chu" />
+<meta name="author" content="Karandeep Chadha" />
 
 
 <title>R Markdown and Leaflet</title>
@@ -67,24 +67,13 @@ img {
 
 <div id="header">
 <h1 class="title">R Markdown and Leaflet</h1>
-<h4 class="author"><em>Zhengguo Chu</em></h4>
-<h4 class="date"><em>03 January, 2017</em></h4>
+<h4 class="author"><em>Karandeep Chadha</em></h4>
 </div>
 
 
-<div id="instructions" class="section level1">
-<h1>Instructions</h1>
-<p>Create a web page using R Markdown that features a map created with Leaflet.</p>
-<p>Host your webpage on either GitHub Pages, RPubs, or NeoCities.</p>
-<p>Your webpage must contain the date that you created the document, and it must contain a map created with Leaflet. We would love to see you show off your creativity! Review criterialess The rubric contains the following two questions:</p>
-<ol style="list-style-type: decimal">
-<li>Does the web page feature a date and is this date less than two months before the date that you’re grading this assignment?</li>
-<li>Does the web page feature an interactive map that appears to have been created with Leaflet?</li>
-</ol>
-</div>
-<div id="demenstration" class="section level1">
-<h1>Demenstration</h1>
-<p>This work is to present a population map of top 50 metroplitan areas of the United States. The original data is downloaded from www.statcrunch.com <a href="https://www.statcrunch.com/app/index.php?dataid=1232319">Metropolitan Statistical Areas in the U.S. - Poplulation, Location</a>. However, we only used the top 50 metroplitan areas’ data.</p>
+<div id="Output" class="section level1">
+<h1>Output</h1>
+<p>The original data is downloaded from www.statcrunch.com <a href="https://www.statcrunch.com/app/index.php?dataid=1232319">Metropolitan Statistical Areas in the U.S. - Poplulation, Location</a>. However, we only used the top 50 metroplitan areas’ data.</p>
 <p>First import the data and do the pre-process:</p>
 <pre class="r"><code>setwd(&quot;~/Documents/Coursera/09 Develop Data Product&quot;)
 geodata &lt;- read.csv(file = &quot;MetroData.csv&quot;,
