@@ -1,0 +1,127 @@
+<html>
+
+	<head>
+
+		<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css"
+			 integrity="sha512-07I2e+7D8p6he1SIM+1twR5TIrhUQn9+I6yjqD53JQjFiMf8EtC93ty0/5vJTZGF8aAocvHYNEDJajGdNx1IsQ=="
+			 crossorigin=""/>
+
+		<script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"
+			 integrity="sha512-A7vV8IFfih/D732iSSKi20u/ooOfj/AGehOKq0f4vLT1Zr2Y+RX7C+w8A1gaSasGtRUZpF/NZgzSAu4/Gc41Lg=="
+			 crossorigin=""></script>
+			 
+		<script type="text/javascript" src="Data/us-states.js"></script>
+		
+		<style>
+			#map { height: 100%; }
+			.info {
+				padding: 10px 10px;
+				font: 18px/18px Arial, Helvetica, sans-serif;
+				background: rgba(255,255,255,0.8);
+				box-shadow: 0 0 15px rgba(0,0,0,0.2);
+				border-radius: 5px;
+			}
+			.info h3 {
+				margin: 0 0 10 0px;
+			}
+		</style>
+
+	</head>
+
+	<body>
+
+		<div id="map">
+		</div>
+
+		<script>
+
+			// Load and initialize map
+			var map = L.map('map').setView([37.8, -96], 5);
+			L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://mapbox.com">Mapbox</a>',
+				maxZoom: 10,
+				id: 'mapbox.light',
+				accessToken: 'pk.eyJ1IjoiZGhhZ3F1aXN0IiwiYSI6ImNqMmk1aTBsMDAwZnozMm11NnA0a3B4dHUifQ.Puzb-n9cM6ClIclEBkD9Kg'
+			}).addTo(map);
+			L.geoJson(statesData).addTo(map);
+			
+			// Define color scheme
+			function getColor(popden) {
+				return popden > 1000 ? '#084594' :
+						popden > 500  ? '#2171b5' :
+						popden > 100  ? '#6baed6' :
+						popden > 50   ? '#9ecae1' :
+						popden > 20   ? '#c6dbef' :
+						popden > 10   ? '#eff3ff' :
+									'#ffffff';
+			}
+
+			// Define stroke
+			function style(feature) {
+				return {
+					weight: 2,
+					opacity: 1,
+					color: 'gray',
+					fillOpacity: 0.5,
+					fillColor: getColor(feature.properties.density)
+				};
+			}
+			
+			// Information box on hover
+			var info = L.control();
+
+			info.onAdd = function (map) {
+				this._div = L.DomUtil.create('div', 'info');
+				this.update();
+				return this._div;
+			};
+
+			info.update = function (props) {
+				this._div.innerHTML = '<h3>U.S. Population Density</h3>' +  (props ?
+					'<b>' + props.name + '</b><br />' + props.density + ' people / mi<sup>2</sup>'
+					: 'Hover over a state.</i>');
+			};
+
+			info.addTo(map);
+
+			function highlightFeature(e) {
+				var layer = e.target;
+
+				layer.setStyle({
+					weight: 5,
+					color: '#666',
+					dashArray: '',
+					fillOpacity: 0.7
+				});
+
+				if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+					layer.bringToFront();
+				}
+
+				info.update(layer.feature.properties);
+			}
+
+			var geojson;
+
+			function resetHighlight(e) {
+				geojson.resetStyle(e.target);
+				info.update();
+			}
+
+			function onEachFeature(feature, layer) {
+				layer.on({
+					mouseover: highlightFeature,
+					mouseout: resetHighlight
+				});
+			}
+
+			geojson = L.geoJson(statesData, {
+				style: style,
+				onEachFeature: onEachFeature
+			}).addTo(map);
+		
+		</script>
+
+	</body>
+
+</html>
